@@ -1,0 +1,73 @@
+/* Home Styles */
+.block-container {
+    background-color: rgba(0, 0, 0, 0.7);
+    margin: 10rem 0rem;
+}
+
+/* Roles Styles */
+.backg-container {
+    background-color: rgba(0, 0, 0, 0.7);
+    margin: 5rem 0rem 5rem 0rem;
+}
+.backg-container form { margin: 0rem 0rem 3rem 0rem; }
+.card-text-color {
+    color: #000;
+}
+.table-color {
+    background-color: #FFF;
+    color: #000;
+}
+
+/* Scroll */
+.scrollbar {
+    height: 89%;
+	overflow-y: scroll;
+}
+
+.force-overflow {
+	min-height: 590px;
+}
+
+/* Media Queries */
+@media only screen and (min-width: 992px) {
+    .scrollbar { overflow: hidden; }
+}
+
+@media only screen and (max-width: 780px) {
+    .block-container, .backg-container {
+        margin: 3.5rem 0rem 3.5rem 0rem;
+        font-size: 12px;
+    }
+    .backg-container h2 { font-size: 18px; }
+    .backg-container form { margin: 0rem 0rem 2rem 0rem; }
+
+    .usersList h3, .usersList .card h5,
+    .usersList .card .btn { font-size: 15px; }
+    .scrollbar { overflow: hidden; }
+} 
+
+@media only screen and (max-width: 575px) { 
+    .backg-container form { margin: 0rem 0rem 1rem 0rem; }
+    .usersList .card { margin-bottom: 10px; }
+    .scrollbar { height: 94%; overflow-y: scroll; }
+}
+
+/* STYLE SC */
+
+ #style-sc::-webkit-scrollbar-track {
+     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+     border-radius: 10px;
+     background-color: #1d1d1d99;
+ }
+ 
+ #style-sc::-webkit-scrollbar {
+     width: 12px;
+     background-color: #1d1d1d99;
+ }
+ 
+ #style-sc::-webkit-scrollbar-thumb {
+     border-radius: 10px;
+     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.6);
+     background-color: #175c67;
+ }
+ 
