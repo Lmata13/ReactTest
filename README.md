@@ -1,5 +1,7 @@
 ## React Test
 
+React, Redux, Node and Bootstrap.
+
 ## Available Scripts
 
 In the project directory, you can run:
