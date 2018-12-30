@@ -7,86 +7,18 @@ import ProjectsList from './DataItems/ProjectsList';
 import RolesList from './DataItems/RolesList';
 
 
-const data = { user: '', role: '', project: '', rows: [] };
-
-const Rows = (data) => {
-    if(data.data.user != undefined && data.data.user != '') {
-        return (
-            <tr>
-                <td>{data.data.user}</td>				
-                <td>{data.data.role}</td>				
-                <td>{data.data.project}</td>
-            </tr>
-        );
-    }
-    else {
-        return (
-            <tr>
-                <td></td> 
-                <td> No data found </td> 
-                <td></td>
-            </tr>
-        );
-    }
-}
-
 class RolesManagement extends Component {
     constructor(props) {
         super(props);
-        this.state = { user: 'John Doe', role: 'Admin', project: 'Trip to space', rows: [] };
-        
-        this.onChangeUser = this.onChangeUser.bind(this);
-        this.onChangeRole = this.onChangeRole.bind(this);
-        this.onChangeProject = this.onChangeProject.bind(this);
-
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.state = { user: '', role: '', project: '', rows: [] };
     }
-    onChangeUser(e) {
-        var options = e.target.options;
-        var user = [];
-            for (let i = 0, len = options.length; i < len; i++) {
-                if (options[i].selected) {
-                    user.push(options[i].value);
-                }
-            }   
-        this.setState({user: user });
-    }
-    onChangeRole(e) {   
-        var options = e.target.options;
-        var role = [];
-            for (let i = 0, len = options.length; i < len; i++) {
-                if (options[i].selected) {
-                    role.push(options[i].value);
-                }
-            }
-        this.setState({role: role });
-    }
-    onChangeProject(e) {   
-        var options = e.target.options;
-        var project = [];
-            for (let i = 0, len = options.length; i < len; i++) {
-                if (options[i].selected) {
-                    project.push(options[i].value);
-                }
-            }
-        this.setState({project: project });
-    }
-    handleSubmit(e) {
+   
+    onSubmit(e) {
         e.preventDefault(); 
-        //this.addRow();
+        const obj = { user: this.state.user, role: this.state.role, project: this.state.project };
+        this.setState({ rows:[ this.state.rows, obj ], user: '', role: '', project: '' });
 
-        alert('You have choose: ' + this.state.user + ' with role ' + this.state.role + ' in ' + this.state.project);
-        console.log('You have choose: ' + this.state.user + ' with role ' + this.state.role + ' in ' + this.state.project);
-    }
-
-    addRow() {        
-        const newUserVal = this.state.user;
-        const newRoleVal = this.state.role;
-        const newProjectVal = this.state.project;     
-
-        this.data = { user: newUserVal, role: newRoleVal, project: newProjectVal }
-        this.state.rows.push(this.data);
-        console.log(this.state.rows);
+        //alert('You have choose: ' + this.state.user + ' with role ' + this.state.role + ' in ' + this.state.project);
     }
 
     render() {
@@ -94,12 +26,12 @@ class RolesManagement extends Component {
         <div className="backg-container scrollbar" id="style-sc">
             <div className="container pt-3">
                 <h2>Select Roles</h2>    
-                <Form onSubmit={this.handleSubmit}>
+                <Form onSubmit={this.onSubmit.bind(this)}>
                     <Row form>
                     <Col md={6}>
                         <FormGroup>
                             <Label for="user">User Name</Label>
-                            <Input type="select" name="user" id="user" value={this.state.user} onChange={this.onChangeUser}>
+                            <Input type="select" name="user" id="user" onChange={event => this.setState({ user: event.target.value })} value={this.state.user}> 
                                 <UsersList />
                             </Input>
                         </FormGroup>
@@ -107,7 +39,7 @@ class RolesManagement extends Component {
                     <Col md={6}>
                         <FormGroup>
                             <Label for="role">Role</Label>
-                            <Input type="select" name="role" id="role" value={this.state.role} onChange={this.onChangeRole}>
+                            <Input type="select" name="role" id="role" onChange={event => this.setState({ role: event.target.value})} value={this.state.role}> 
                                 <RolesList />
                             </Input>
                         </FormGroup>
@@ -115,12 +47,12 @@ class RolesManagement extends Component {
                     </Row>
                     <FormGroup>
                         <Label for="project">Project Name</Label>
-                        <Input type="select" name="project" id="project" value={this.state.project} onChange={this.onChangeProject}>
+                        <Input type="select" name="project" id="project" onChange={event => this.setState({ project: event.target.value})} value={this.state.project}> 
                             <ProjectsList />  
                         </Input>
                     </FormGroup>
 
-                    <Button outline color="info" inClick={this.addRow()}>Select</Button>                
+                    <Button outline color="info" ref={(ref) => this.submitInput = ref} value={this.state.input}>Select</Button>                
                 </Form>
 
                 <section className="usersList">
@@ -153,7 +85,7 @@ class RolesManagement extends Component {
                     </div>
                     <div className="mt-4 pb-3" id="comingSoon">
                         <p>Comming Soon:</p>
-                        <div class="table-responsive">
+                        <div className="table-responsive">
                             <Table className="table-color table">
                                 <thead>
                                     <tr>
@@ -164,9 +96,11 @@ class RolesManagement extends Component {
                                 </thead>
                                 <tbody>
                                     {
-                                        this.state.rows.map(row => (
-                                            <Rows data = {row}/>
-                                        )) 
+                                        this.state.rows.map((data, index) => {                                            
+                                           return ( 
+                                                <Rows data={data} key={index} row={index}/> 
+                                            )
+                                        }) 
                                     }
                                 </tbody>
                             </Table>
@@ -181,17 +115,20 @@ class RolesManagement extends Component {
 }
 export default RolesManagement
 
-/*
-   <Rows data = {this.state}/>
 
-   const ItemList = this.state.rows.map(row => 
+class Rows extends Component {
+    constructor(props) {
+        super(props);
+        //const i = this.props.data.length + 1;
+    }
+
+    render(){
+        return (
             <tr>
-                <td >{row.user}</td>				
-                <td >{row.role}</td>				
-                <td >{row.project}</td>
+                <td>{this.props.data.user}</td>				
+                <td>{this.props.data.role}</td>				
+                <td>{this.props.data.project}</td>
             </tr>
         );
-        return (
-            ItemList
-        );
-*/
+    }
+}
